@@ -302,10 +302,48 @@ class Collections
       $date        = $photo['photo']['dates']['taken'];
       $date        = substr($date, 0, 10);
       
+      $fullDate = explode('-', $date);
+      $dateFacet = substr_replace($fullDate[0] , '0' , -1 , 4);  
+
+      $dateFacetArr = [
+        '17' => '1800',
+        '18' => '1810',
+        '19' => '1820',
+        '20' => '1830',
+        '21' => '1840',
+        '22' => '1850',
+        '23' => '1860',
+        '24' => '1870',
+        '25' => '1880',
+        '26' => '1890',
+        '28' => '1900',
+        '29' => '1910',
+        '30' => '1920',
+        '31' => '1930',
+        '32' => '1940',
+        '33' => '1950',
+        '34' => '1960',
+        '35' => '1970',
+        '36' => '1980',
+        '37' => '1990',
+        '39' => '2000',
+        '40' => '2010'
+      ];
+
+      $dateFacetFinal = array_search($dateFacet , $dateFacetArr);
+      
       $url = $photo['photo']['urls']['url'][0]['_content'];
+
+      $itemTag = '';
+      foreach($value['photo']['tags']['tag'] as $tag) {
+        $itemTag .= $tag['raw'] . ',';
+      }
+
+      // remove trailing comma
+      rtrim($itemTag , ",");
       
       array_push($list, array(
-        $value, // Image Identifier
+        $value['photo']['id'], // Image Identifier
         '', // Parent ID*
         '', // Page Order*
         $imageFileName, // Image/File Name
@@ -314,15 +352,15 @@ class Collections
         $description, // Description EN
         $description, // Description CY
         '', // Item type
-        '', // Tags EN
+        $itemTag, // Tags EN
         '', // Tags CY
         $date, // Date
-        '', // Owner
-        '', // Creator
+        $user, // Owner
+        $user, // Creator
         $url, // Website en
         $url, // Website cy
         '', // What facet
-        '', // When facet
+        $dateFacetFinal, // When facet
         '', // Location (lat, lon)
         '', // Location description en
         '', // Location description cy
@@ -338,7 +376,8 @@ class Collections
         '', // Right Holder 3 EN
         '', // Right Holder 3 CY
         '', // Begin Date 3
-        '' // Addional rights
+        '', // Addional rights
+        $image_location_source
       ));
     }
     
