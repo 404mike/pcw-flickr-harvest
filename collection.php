@@ -11,7 +11,7 @@ class Collections
   {
     $this->apiKey = '';
     
-    $this->collections = array();
+    $this->collections = array('');
     
     $this->loopCollections();
     $this->getCollectionData();
@@ -167,7 +167,8 @@ class Collections
         'UC31',
         'UC32',
         'UC33',
-        'UC34'
+        'UC34',
+        'all_images'
       ),
       
       array(
@@ -289,7 +290,7 @@ class Collections
       
       $photo = $this->apiCall('item', '', '', $value);
       $image = $this->apiCall('single', '', '', $value);
-      
+     
       $image_arr = $image['sizes']['size'];
       
       $image_location        = end($image_arr);
@@ -301,6 +302,8 @@ class Collections
       $description = $photo['photo']['description']['_content'];
       $date        = $photo['photo']['dates']['taken'];
       $date        = substr($date, 0, 10);
+
+      $user        = $photo['photo']['owner']['realname'];
       
       $fullDate = explode('-', $date);
       $dateFacet = substr_replace($fullDate[0] , '0' , -1 , 4);  
@@ -335,7 +338,7 @@ class Collections
       $url = $photo['photo']['urls']['url'][0]['_content'];
 
       $itemTag = '';
-      foreach($value['photo']['tags']['tag'] as $tag) {
+      foreach($photo['photo']['tags']['tag'] as $tag) {
         $itemTag .= $tag['raw'] . ',';
       }
 
@@ -343,7 +346,7 @@ class Collections
       rtrim($itemTag , ",");
       
       array_push($list, array(
-        $value['photo']['id'], // Image Identifier
+        $photo['photo']['id'], // Image Identifier
         '', // Parent ID*
         '', // Page Order*
         $imageFileName, // Image/File Name

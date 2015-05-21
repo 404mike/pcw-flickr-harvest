@@ -4,7 +4,7 @@ class GetImages
 {
   
   private $csvFiles;
-  private $filepath = "/home/mij/www/flickr/images/";
+  private $filepath = "/home/mij/Desktop/mij/pcw-flickr-harvest";
   
   public function __construct()
   {
@@ -53,7 +53,7 @@ class GetImages
     
     foreach ($data as $d) {
       
-      $url = $d['UC4'];
+      $url = $d['all_images'];
       
       $filenameArr   = explode('/', $d['UC4']);
       $imagefilename = end($filenameArr);
@@ -72,7 +72,7 @@ class GetImages
       file_put_contents($web, file_get_contents($url, False, $cxContext));
       file_put_contents($master, file_get_contents($url, False, $cxContext));
       
-      echo "\n$d[UC4]";
+      echo "\n$d[all_images]";
     }
   }
   
